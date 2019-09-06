@@ -11,9 +11,6 @@ class Entity:
     def __repr__(self):
         return f"<heat2d.entity.Entity({(self.x, self.y)})>"
 
-    def __str__(self):
-        return self.__repr__()
-
     def update(self):
         pass
 
