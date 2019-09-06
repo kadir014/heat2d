@@ -1,4 +1,4 @@
-from heat2d_dev.sprite import Sprite
+from heat2d.sprite import Sprite
 
 class Entity:
 
