@@ -1,7 +1,7 @@
 DISPATCHER = dict()
 
 version = "0.1.0"
-state = "Pre-alpha"
+state = "Alpha"
 author = "Kadir Aksoy"
 license = "GNU General Public License v3.0"
 
