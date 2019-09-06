@@ -18,5 +18,10 @@ Heat2D is a simple game engine built on [Pygame](https://www.pygame.org). The ma
 - Sprites & Animation
 - Easy Input Handling
 
+## To-do
+- Configurable In-Game Console
+- Sprite Editor
+- Tilemap Support
+
 ## License
 [LGPL 3.0](LICENSE) © Kadir Aksoy
