@@ -240,12 +240,17 @@ class Engine:
 
     #   Main loop
     def run(self):
+        stage_warn = False
+        if not self.current_stage:
+            print("Warning: No stage has been declared.")
+            stage_warn = True
+
         while self.window.active:
             self.window.clock.tick(self.window.max_fps)
             self.window.fps = self.window.clock.get_fps()
 
             self.handle_events()
-            self.stages[self.current_stage].update()
+            if not stage_warn: self.stages[self.current_stage].update()
 
             self.draw()
 
