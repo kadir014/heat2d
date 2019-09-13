@@ -1,5 +1,5 @@
 import pygame
-from heat2d import DISPATCHER
+from . import DISPATCHER
 
 class Sprite:
 

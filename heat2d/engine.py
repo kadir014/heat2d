@@ -1,7 +1,7 @@
 import pygame
 from math import ceil
-from heat2d import DISPATCHER
-from heat2d.libs.keys import key_dictionary
+from . import DISPATCHER
+from .libs.keys import key_dictionary
 
 class Engine:
 
