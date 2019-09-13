@@ -33,9 +33,6 @@ class Engine:
         def __repr__(self):
             return f"<heat2d.engine.Engine.Window({self.size}, {self.title})>"
 
-        def __str__(self):
-            return self.__repr__()
-
         @property
         def width(self): return self._width
 
@@ -93,9 +90,6 @@ class Engine:
         def __repr__(self):
             return f"<heat2d.engine.Engine.Camera({self.x}, {self.y})>"
 
-        def __str__(self):
-            return self.__repr__()
-
         def focus(self, focus_entity, offset = (0, 0), center = (0, 0), glide = False):
             self.focus_entity = focus_entity
             self.offset = offset
@@ -133,9 +127,6 @@ class Engine:
 
     def __repr__(self):
         return f"<heat2d.engine.Engine({self.window})>"
-
-    def __str__(self):
-        return self.__repr__()
 
     #   @engine.input decorator function to store inputs
     def input(self, func):
