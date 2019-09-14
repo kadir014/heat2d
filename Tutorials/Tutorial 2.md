@@ -6,7 +6,7 @@ In tutorial 1, you've learned about engine and setting a window. Here you'll lea
 Stage concept is the most important thing after the core engine in Heat2D. All elements of a game is a part of a stage, but there can be mulitple stages and this is the important part because you can create menus, levels, etc.. with this concept.
 
 ## Setting things up
-After importing and building the engine, you can create a class and inherit `heat2d.Stage` base class and call it's constructor. **Important: Your class's name is your stage's name, not a instance of the class.**
+After importing and building the engine, you can create a class and inherit `heat2d.Stage` base class and call it's constructor. **Important: Your class's name is your stage's name, not an instance of the class.**
 ```py
 class MyStage(Stage):
     def __init__(self):
