@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/badge/status-alpha-red.svg">
 </p>
 
+---
 Heat2D is a simple game engine built on [Pygame](https://www.pygame.org). The main purpose of the engine is to simplify and speed-up the process of game development.
 
 ## Table of Contents
