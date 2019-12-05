@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/kadir014/heat2d/blob/master/Heat2D%20Logo.png"><br>
+  <img src="https://kadir014.github.io/assets/coldgui_logo.png"><br>
   <img src="https://img.shields.io/badge/python-3%2B-green.svg">
   <img src="https://img.shields.io/badge/pygame-1.9.6%2B-green.svg">
   <img src="https://img.shields.io/badge/license-LGPL%203.0-blue.svg">
@@ -26,4 +26,4 @@ Heat2D is a simple game engine built on [Pygame](https://www.pygame.org). The ma
 - Tilemap Support
 
 ## License
-[LGPL 3.0](LICENSE) © Kadir Aksoy
+[GPL 3.0](LICENSE) © Kadir Aksoy
