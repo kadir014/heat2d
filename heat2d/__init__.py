@@ -1,13 +1,67 @@
+"""
+      HEAT2D Game Engine
+     GPL 3.0 © Kadir Aksoy
+https://github.com/kadir014/heat2d
+
+Final namespace:
+- VERSION
+- VERSION_TUPLE
+- VERSION_STATE
+- LICENSE
+
+- DISPATCHER
+- PLATFORM
+
+- Engine
+- Stage
+- GameObject
+- Sprite
+- visuals
+  - Rectangle
+- ui
+  - UILayer
+
+"""
+
+VERSION =       "0.0.0"
+VERSION_TUPLE = (0, 0, 0)
+VERSION_STATE = "alpha"
+LICENSE =       "GNU General Public License v3.0"
+
+import sys
+PLATFORM = None
+if   sys.platform == "win32": PLATFORM = "Windows"
+elif sys.platform == "darwin":  PLATFORM = "MacOS"
+elif sys.platform.startswith("linux"): PLATFORM = "Linux"
+elif sys.platform.startswith("freebsd"): PLATFORM = "FreeBSD"
+
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
+import pygame
+
 DISPATCHER = dict()
 
-version = "0.1.0"
-state = "Alpha"
-author = "Kadir Aksoy"
-license = "GNU General Public License v3.0"
+if "HEAT2D_DISABLE_ANSI_COLORS" in os.environ: __USE_ANSI_COLORS = False
+else: __USE_ANSI_COLORS = True
 
-from .engine import Engine
-from .entity import Entity
-from .stage import Stage
-from .sprite import Sprite
+from heat2d.libs.terminal import REVERSE, RESET, FG
+if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
+    if __USE_ANSI_COLORS:
+        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
+        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588 Heat2D Version: 0.0.0")
+        print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588 Pygame Version: {pygame.version.ver}")
+        print("\u2588" + "\u2584"*20 + "\u2588\n")
+    else:
+        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
+        print(f"\u2588       HEAT2D       \u2588 Heat2D Version: 0.0.0")
+        print(f"\u2588    GAME ENGINE     \u2588 Pygame Version: {pygame.version.ver}")
+        print("\u2588" + "\u2584"*20 + "\u2588\n")
 
-from .gui.label import Label
+from heat2d.engine import Engine
+from heat2d.stage import Stage
+from heat2d.gameobject import GameObject
+from heat2d.sprite import Sprite
+from heat2d import visuals
+from heat2d import ui
+
+del sys, os, pygame, libs, engine, exceptions, window, gameobject, renderer, sprite, stage, REVERSE, RESET, FG
