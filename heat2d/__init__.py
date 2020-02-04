@@ -64,4 +64,4 @@ from heat2d.sprite import Sprite
 from heat2d import visuals
 from heat2d import ui
 
-del sys, os, pygame, libs, engine, exceptions, window, gameobject, renderer, sprite, stage, REVERSE, RESET, FG
+del sys, os, pygame, libs, engine, exceptions, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG

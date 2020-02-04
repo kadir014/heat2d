@@ -1,5 +1,6 @@
 import pygame
 from heat2d import DISPATCHER
+from heat2d.ui import UILayer
 
 
 class Renderer:
@@ -19,11 +20,12 @@ class Renderer:
     def draw(self):
         self.window.surface.fill(self.window.clear_color)
 
-        for gameobject in DISPATCHER["engine"].stages[DISPATCHER["engine"].current_stage].gameobjects:
+        gameobjects = DISPATCHER["engine"].stages[DISPATCHER["engine"].current_stage].gameobjects
+        for gameobject in gameobjects:
             gameobject.update()
             self.window.surface.blit(gameobject.sprite.surface, (gameobject.x - gameobject.sprite.surface_width/2, gameobject.y - gameobject.sprite.surface_height/2))
 
-        for layer in self.ui_layers():
+        for layer in self.ui_layers:
             self.window.surface.blit(layer.surface, (layer.x, layer.y))
 
         pygame.display.flip()

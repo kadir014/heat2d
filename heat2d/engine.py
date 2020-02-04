@@ -7,7 +7,10 @@ from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
 from heat2d.visuals.rectangle import Rectangle
 from heat2d.libs.keys import key_dictionary
-from heat2d.exceptions import warn
+from heat2d.exceptions import NoStageDeclared
+from heat2d.ui.layer import UILayer
+from heat2d import ui
+from heat2d.timer import Timer, TickTimer
 
 
 class Engine:
@@ -21,6 +24,9 @@ class Engine:
 
         self.events = None
         self.inp_funcs = {"key_held" : list(), "key_pressed" : list(), "key_released" : list(), "mouse_held" : list(), "mouse_pressed" : list(), "mouse_released" : list()}
+        self.event_funcs = {"update" : list(), "every_tick" : list(), "every_time" : list()}
+        self.timers = list()
+
         self.key_used = list()
         self.mouse_x, self.mouse_y = 0, 0
 
@@ -30,6 +36,9 @@ class Engine:
 
         self.__is_running = False
 
+        #Initialize modules
+        ui.init()
+
     def __repr__(self):
         return f"<heat2d.Engine({self.window})>"
 
@@ -37,17 +46,30 @@ class Engine:
     def input(self, func):
         self.inp_funcs[func.__name__].append(func)
 
+    #   @engine.event decorator function to store input calls
+    def event(self, *args):
+        def wrapper(func):
+            self.event_funcs[func.__name__].append(func)
+            if func.__name__ == "every_tick": self.timers.append(TickTimer(func, args[0]))
+            elif func.__name__ == "every_time": self.timers.append(Timer(func, args[0]))
+
+        return wrapper
+
     def add(self, *args):
         for arg in args:
-            #Initialize objects
-            inst = arg()
+            if isinstance(arg, UILayer):
+                self.renderer.ui_layers.append(arg)
 
-            if isinstance(inst, Stage):
-                self.stages[inst.__class__.__name__] = inst
-                if len(self.stages) == 1: self.current_stage = inst.__class__.__name__
+            else:
+                #Initialize objects
+                inst = arg()
 
-            elif isinstance(inst, GameObject):
-                self.gameobjects.append(inst)
+                if isinstance(inst, Stage):
+                    self.stages[inst.__class__.__name__] = inst
+                    if len(self.stages) == 1: self.current_stage = inst.__class__.__name__
+
+                elif isinstance(inst, GameObject):
+                    self.gameobjects.append(inst)
 
     def change_stage(self, stage):
         if stage in self.stages: self.current_stage = stage
@@ -102,18 +124,17 @@ class Engine:
     def run(self):
         self.__is_running = True
 
-        stage_warn = False
-        if not self.current_stage:
-            warn("No stage has been declared.")
-            stage_warn = True
+        if not self.current_stage: raise NoStageDeclared("You have to declare at least one stage to run the engine.")
 
         while self.__is_running:
             self.window.clock.tick(self.window.max_fps)
             self.window.fps = self.window.clock.get_fps()
 
             self.handle_events()
-            if not stage_warn: self.stages[self.current_stage].update()
+            self.stages[self.current_stage].update()
 
+            for timer in self.timers: timer.update()
+            for func in self.event_funcs["update"]: func()
             self.renderer.draw()
 
         pygame.quit()

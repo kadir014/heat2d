@@ -1,4 +1,5 @@
 import pygame
+import os
 
 
 class Window:
@@ -12,7 +13,7 @@ class Window:
         self.clear_color = clear_color
 
         if icon: self.icon = icon
-        else: self.icon = "heat2d/favicon.png"
+        else: self.icon = os.path.join(__file__[:len(__file__) - len("window.py")], "favicon.png")
         self.size = size
         self.title = self._title
 

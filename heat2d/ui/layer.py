@@ -11,3 +11,8 @@ class UILayer:
 
     def __repr__(self):
         return f"heat2d.ui.UILayer(({self.x},{self.y}), {self.width}x{self.height})"
+
+    def render(self, clear=True):
+        if clear: self.surface.fill((255, 255, 255, 255))
+        self.surface.blit(self.back_surface, (0, 0))
+        self.surface.blit(self.front_surface, (0, 0))
