@@ -1,6 +1,5 @@
 import pygame
 from heat2d import DISPATCHER
-from heat2d.ui import UILayer
 
 
 class Renderer:
@@ -26,6 +25,9 @@ class Renderer:
             self.window.surface.blit(gameobject.sprite.surface, (gameobject.x - gameobject.sprite.surface_width/2, gameobject.y - gameobject.sprite.surface_height/2))
 
         for layer in self.ui_layers:
-            self.window.surface.blit(layer.surface, (layer.x, layer.y))
+            if layer.effect:
+                layer.effect.process(self.window.surface, layer.back_surface.get_size(), (layer.x, layer.y))
+            self.window.surface.blit(layer.back_surface, (layer.x, layer.y))
+            self.window.surface.blit(layer.front_surface, (layer.x, layer.y))
 
         pygame.display.flip()

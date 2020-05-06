@@ -33,7 +33,7 @@ class Sprite:
             return
 
         self.width_constant = abs(self.width - (cos(pi / 4) * self.width) * 2)
-        self.height_constant = abs(self.height - (cos(pi / 4) * self.height) * 2)
+        self.height_constant = abs(self.height - (sin(pi / 4) * self.height) * 2)
 
         self.surface = pygame.Surface((self.width + self.width_constant,
                                        self.height + self.height_constant),

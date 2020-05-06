@@ -19,12 +19,14 @@ Final namespace:
 - visuals
   - Rectangle
 - ui
-  - UILayer
+  - Context
+- postprocess
+- networking
 
 """
 
-VERSION =       "0.0.0"
-VERSION_TUPLE = (0, 0, 0)
+VERSION =       "0.0.1"
+VERSION_TUPLE = (0, 0, 1)
 VERSION_STATE = "alpha"
 LICENSE =       "GNU General Public License v3.0"
 
@@ -40,6 +42,8 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
 import pygame
 
 DISPATCHER = dict()
+THREADS = list()
+TOTAL_THREADS = 0
 
 if "HEAT2D_DISABLE_ANSI_COLORS" in os.environ: __USE_ANSI_COLORS = False
 else: __USE_ANSI_COLORS = True
@@ -63,5 +67,7 @@ from heat2d.gameobject import GameObject
 from heat2d.sprite import Sprite
 from heat2d import visuals
 from heat2d import ui
+from heat2d import postprocess
+from heat2d import networking
 
 del sys, os, pygame, libs, engine, exceptions, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG

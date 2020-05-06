@@ -1,14 +1,12 @@
 import pygame
-from math import ceil
 from heat2d import DISPATCHER
 from heat2d.window import Window
 from heat2d.renderer import Renderer
 from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
-from heat2d.visuals.rectangle import Rectangle
 from heat2d.libs.keys import key_dictionary
 from heat2d.exceptions import NoStageDeclared
-from heat2d.ui.layer import UILayer
+from heat2d.ui.context import Context
 from heat2d import ui
 from heat2d.timer import Timer, TickTimer
 
@@ -55,9 +53,15 @@ class Engine:
 
         return wrapper
 
+    def remove_by_id(self, inpfunc, id):
+        for func in self.inp_funcs[inp_func]:
+            if id(func) == id:
+                self.inp_funcs[inp_func].remove(func)
+                return
+
     def add(self, *args):
         for arg in args:
-            if isinstance(arg, UILayer):
+            if isinstance(arg, Context):
                 self.renderer.ui_layers.append(arg)
 
             else:
@@ -118,8 +122,8 @@ class Engine:
                 elif event.button == 3 : b = "right"
                 for func in self.inp_funcs["mouse_released"]: func(b)
 
-
         self.inp_funcs = {"key_held" : list(), "key_pressed" : list(), "key_released" : list(), "mouse_held" : list(), "mouse_pressed" : list(), "mouse_released" : list()}
+
 
     def run(self):
         self.__is_running = True

@@ -7,3 +7,4 @@ def warn(message):
     else: print(f"WARNING: {message}")
 
 class NoStageDeclared(Exception): pass
+class NetworkingError(Exception): pass
