@@ -4,7 +4,7 @@ from heat2d.window import Window
 from heat2d.renderer import Renderer
 from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
-from heat2d.libs.keys import key_dictionary
+from heat2d.libs.keys import key_dictionary, button_dictionary, inv_key_dictionary, inv_button_dictionary
 from heat2d.exceptions import NoStageDeclared
 from heat2d.ui.context import Context
 from heat2d import ui
@@ -20,12 +20,11 @@ class Engine:
         self.window = Window((800, 600))
         self.renderer = Renderer()
 
-        self.events = None
-        self.inp_funcs = {"key_held" : list(), "key_pressed" : list(), "key_released" : list(), "mouse_held" : list(), "mouse_pressed" : list(), "mouse_released" : list()}
-        self.event_funcs = {"update" : list(), "every_tick" : list(), "every_time" : list()}
         self.timers = list()
 
-        self.key_used = list()
+        #working with a dictionary might be better than 3 lists
+        self.key_states = {k: [0, 0, 0] for k in key_dictionary}
+        self.mouse_states = {b: [0, 0, 0] for b in button_dictionary}
         self.mouse_x, self.mouse_y = 0, 0
 
         self.current_stage = None
@@ -79,51 +78,69 @@ class Engine:
         if stage in self.stages: self.current_stage = stage
         else: raise NameError(f"{stage} is not found on stages.")
 
+    def key_pressed(self, key):
+        if self.key_states[key][1]: return True
+        return False
+
+    def key_released(self, key):
+        if self.key_states[key][2]: return True
+        return False
+
+    def key_held(self, key):
+        if self.key_states[key][0]: return True
+        return False
+
+    def mouse_pressed(self, button):
+        if self.mouse_states[button][1]: return True
+        return False
+
+    def mouse_released(self, button):
+        if self.mouse_states[button][2]: return True
+        return False
+
+    def mouse_held(self, button):
+        if self.mouse_states[button][0]: return True
+        return False
+
+    def mouse_wheel_up(self):
+        if self.mouse_states["wheelup"][1]: return True
+        return False
+
+    def mouse_wheel_down(self):
+        if self.mouse_states["wheeldown"][1]: return True
+        return False
+
     def handle_events(self):
         self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
+        for k in self.key_states:
+            self.key_states[k][1] = 0
+            self.key_states[k][2] = 0
 
-        for key in self.key_used:
-            for func in self.inp_funcs["key_held"]:
-                func(list(key_dictionary.keys())[list(key_dictionary.values()).index(key)])
-
-        for func in self.inp_funcs["mouse_held"]:
-            m = pygame.mouse.get_pressed()
-            b = None
-            if m[0]: b = "left"
-            elif m[1]: b = "middle"
-            elif m[2]: b = "right"
-            for func in self.inp_funcs["mouse_held"]: func(b)
+        for b in self.mouse_states:
+            self.mouse_states[b][1] = 0
+            self.mouse_states[b][2] = 0
 
         self.events = pygame.event.get()
         for event in self.events:
             if event.type == pygame.QUIT: self.__is_running = False
 
             elif event.type == pygame.KEYDOWN:
-                self.key_used.append(event.key)
-                for func in self.inp_funcs["key_pressed"]:
-                    func(list(key_dictionary.keys())[list(key_dictionary.values()).index(event.key)])
+                self.key_states[inv_key_dictionary[event.key]][0] = 1
+                self.key_states[inv_key_dictionary[event.key]][1] = 1
 
             elif event.type == pygame.KEYUP:
-                self.key_used.remove(event.key)
-                for func in self.inp_funcs["key_released"]:
-                    func(list(key_dictionary.keys())[list(key_dictionary.values()).index(event.key)])
+                self.key_states[inv_key_dictionary[event.key]][0] = 0
+                self.key_states[inv_key_dictionary[event.key]][1] = 0
+                self.key_states[inv_key_dictionary[event.key]][2] = 1
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                b = None
-                if event.button == 1: b = "left"
-                elif event.button == 2 : b = "middle"
-                elif event.button == 3 : b = "right"
-                for func in self.inp_funcs["mouse_pressed"]: func(b)
+                self.mouse_states[inv_button_dictionary[event.button]][0] = 1
+                self.mouse_states[inv_button_dictionary[event.button]][1] = 1
 
             elif event.type == pygame.MOUSEBUTTONUP:
-                b = None
-                if event.button == 1: b = "left"
-                elif event.button == 2 : b = "middle"
-                elif event.button == 3 : b = "right"
-                for func in self.inp_funcs["mouse_released"]: func(b)
-
-        self.inp_funcs = {"key_held" : list(), "key_pressed" : list(), "key_released" : list(), "mouse_held" : list(), "mouse_pressed" : list(), "mouse_released" : list()}
-
+                self.mouse_states[inv_button_dictionary[event.button]][0] = 0
+                self.mouse_states[inv_button_dictionary[event.button]][1] = 0
+                self.mouse_states[inv_button_dictionary[event.button]][2] = 1
 
     def run(self):
         self.__is_running = True
@@ -138,7 +155,6 @@ class Engine:
             self.stages[self.current_stage].update()
 
             for timer in self.timers: timer.update()
-            for func in self.event_funcs["update"]: func()
             self.renderer.draw()
 
         pygame.quit()

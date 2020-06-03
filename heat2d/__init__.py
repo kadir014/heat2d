@@ -3,26 +3,6 @@
      GPL 3.0 © Kadir Aksoy
 https://github.com/kadir014/heat2d
 
-Final namespace:
-- VERSION
-- VERSION_TUPLE
-- VERSION_STATE
-- LICENSE
-
-- DISPATCHER
-- PLATFORM
-
-- Engine
-- Stage
-- GameObject
-- Sprite
-- visuals
-  - Rectangle
-- ui
-  - Context
-- postprocess
-- networking
-
 """
 
 VERSION =       "0.0.1"
@@ -66,6 +46,7 @@ from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
 from heat2d.sprite import Sprite
 from heat2d import visuals
+from heat2d.timer import Timer, TickTimer
 from heat2d import ui
 from heat2d import postprocess
 from heat2d import networking

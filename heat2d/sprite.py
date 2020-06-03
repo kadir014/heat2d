@@ -46,7 +46,7 @@ class Sprite:
         self.flip_vertical = False
 
     def __blit(self, rotated=True):
-        self.surface.fill((255, 255, 255, 255))
+        self.surface.fill((255, 255, 255, 0))
 
         if rotated:
             self.rotated_surface = pygame.transform.rotate(self.source_image, self.angle)

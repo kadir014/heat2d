@@ -136,3 +136,14 @@ key_dictionary = {
                   "power" : pygame.K_POWER,
                   "euro" : pygame.K_EURO,
                  }
+
+button_dictionary = {
+                     "left" : 1,
+                     "right" : 3,
+                     "middle" : 2,
+                     "wheelup": 4,
+                     "wheeldown": 5
+                    }
+
+inv_key_dictionary =    {v: k for k, v in key_dictionary.items()}
+inv_button_dictionary = {v: k for k, v in button_dictionary.items()}
