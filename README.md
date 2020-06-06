@@ -13,7 +13,7 @@ Heat2D is easy to use, you can access [the documentation here](https://kadir014.
 
 ## Table of Contents
 - [Features](#features)
-- [Documentation](https://kadir014.github.io/projects/heat2d/index.html)
+- [Documentation](#documentation)
 - [License](#license)
 
 ## Features
@@ -25,7 +25,7 @@ Some of the main features Heat2D provides are
 - Extra Handy Libraries
 
 ## Documentation
-You can access [the documentation here](https://kadir014.github.io/projects/heat2d/docs.html)
+You can access [the documentation here](https://kadir014.github.io/projects/heat2d/index.html)
 
 ## License
 [GPL 3.0](LICENSE) © Kadir Aksoy
