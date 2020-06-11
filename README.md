@@ -7,7 +7,7 @@
 </p>
 
 ---
-Heat2D is a simple and concise 2D game engine built on [Pygame](https://www.pygame.org). The main purpose of the engine is to simplify and speed-up the process of game development by providing purposive and useful tools and libraries.
+Heat2D is a simple and concise 2D game engine. The main purpose of the engine is to simplify and speed-up the process of game development by providing purposive and useful tools and libraries.
 
 Heat2D is easy to use, you can access [the documentation here](https://kadir014.github.io/projects/heat2d/index.html). You can use the API Reference, or read the getting started page and tutorials if you are a beginner.
 
