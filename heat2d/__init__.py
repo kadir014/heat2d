@@ -5,8 +5,8 @@ https://github.com/kadir014/heat2d
 
 """
 
-VERSION =       "0.0.2"
-VERSION_TUPLE = (0, 0, 1)
+VERSION =       "0.0.2a2"
+VERSION_TUPLE = (0, 0, 2)
 VERSION_STATE = "alpha"
 LICENSE =       "GNU General Public License v3.0"
 

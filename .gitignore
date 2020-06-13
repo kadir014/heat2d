@@ -1,2 +1,6 @@
 __pycache__/
 dev/
+dist/
+heat2d.egg-info/
+setup.py
+MANIFEST.in
