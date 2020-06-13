@@ -5,7 +5,7 @@ from heat2d.renderer import Renderer
 from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
 from heat2d.libs.keys import key_dictionary, button_dictionary, inv_key_dictionary, inv_button_dictionary
-from heat2d.exceptions import NoStageDeclared
+from heat2d.errors import NoStageDeclared
 from heat2d.ui.context import Context
 from heat2d import ui
 from heat2d.timer import Timer, TickTimer
@@ -58,7 +58,15 @@ class Engine:
                 self.inp_funcs[inp_func].remove(func)
                 return
 
-    def add(self, *args):
+    #   @engine.add decorator to add components into engine
+    def add(self, comp):
+        self._add(comp)
+        #if any(tuple(parent == Stage for parent in cls.__bases__)):
+        #    self.add(cls)
+        #else:
+        #    raise ValueError(f"{cls} is not a Stage")
+
+    def _add(self, *args):
         for arg in args:
             if isinstance(arg, Context):
                 self.renderer.ui_layers.append(arg)

@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-from heat2d.exceptions import NetworkingError
+from heat2d.errors import NetworkingError
 
 HOSTNAME  = socket.gethostname()
 LOCALHOST = socket.gethostbyname(HOSTNAME)
