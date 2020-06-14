@@ -64,7 +64,7 @@ class Sprite:
                 self.rotated_surface.get_width(), self.rotated_surface.get_height())
 
     def scale(self, scale):
-        self.__calc(pygame.transform.scale(self.__source_image, (self.width * scale, self.height * scale)))
+        self.__calc(pygame.transform.scale(self.__source_image, (int(self.width * scale), int(self.height * scale))))
         self.__blit(False)
 
     def set_size(self, size):
