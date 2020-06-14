@@ -10,6 +10,7 @@ VERSION_TUPLE = (0, 0, 2)
 VERSION_STATE = "alpha"
 LICENSE =       "GNU General Public License v3.0"
 
+import time; _start = time.time()
 import sys
 PLATFORM = None
 if   sys.platform == "win32": PLATFORM = "Windows"
@@ -28,19 +29,6 @@ TOTAL_THREADS = 0
 if "HEAT2D_DISABLE_ANSI_COLORS" in os.environ: __USE_ANSI_COLORS = False
 else: __USE_ANSI_COLORS = True
 
-from heat2d.libs.terminal import REVERSE, RESET, FG
-if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
-    if __USE_ANSI_COLORS:
-        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
-        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588 Heat2D Version: {VERSION}")
-        print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588 Pygame Version: {pygame.version.ver}")
-        print("\u2588" + "\u2584"*20 + "\u2588\n")
-    else:
-        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
-        print(f"\u2588       HEAT2D       \u2588 Heat2D Version: 0.0.0")
-        print(f"\u2588    GAME ENGINE     \u2588 Pygame Version: {pygame.version.ver}")
-        print("\u2588" + "\u2584"*20 + "\u2588\n")
-
 from heat2d.engine import Engine
 from heat2d.stage import Stage
 from heat2d.gameobject import GameObject
@@ -51,4 +39,21 @@ from heat2d import ui
 from heat2d import postprocess
 from heat2d import networking
 
-del sys, os, pygame, libs, engine, errors, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG
+from heat2d.libs.terminal import REVERSE, RESET, FG
+if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
+    if __USE_ANSI_COLORS:
+        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
+        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588")
+        print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588")
+        print("\u2588" + "\u2584"*20 + "\u2588\n")
+        print(f"Version: {VERSION}")
+        print(f"init. time: {str(time.time()-_start)[:4]}s\n")
+    else:
+        print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
+        print(f"\u2588       HEAT2D       \u2588")
+        print(f"\u2588    GAME ENGINE     \u2588")
+        print("\u2588" + "\u2584"*20 + "\u2588\n")
+        print(f"Version: {VERSION}")
+        print(f"init. time: {str(time.time()-_start)[:4]}s\n")
+
+del time, sys, os, pygame, libs, engine, errors, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG
