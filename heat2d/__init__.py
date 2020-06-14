@@ -32,7 +32,7 @@ from heat2d.libs.terminal import REVERSE, RESET, FG
 if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
     if __USE_ANSI_COLORS:
         print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
-        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588 Heat2D Version: 0.0.0")
+        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588 Heat2D Version: {VERSION}")
         print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588 Pygame Version: {pygame.version.ver}")
         print("\u2588" + "\u2584"*20 + "\u2588\n")
     else:
