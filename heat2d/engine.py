@@ -39,10 +39,6 @@ class Engine:
     def __repr__(self):
         return f"<heat2d.Engine({self.window})>"
 
-    #   @engine.input decorator function to store input calls
-    def input(self, func):
-        self.inp_funcs[func.__name__].append(func)
-
     #   @engine.event decorator function to store input calls
     def event(self, *args):
         def wrapper(func):
@@ -51,12 +47,6 @@ class Engine:
             elif func.__name__ == "every_time": self.timers.append(Timer(func, args[0]))
 
         return wrapper
-
-    def remove_by_id(self, inpfunc, id):
-        for func in self.inp_funcs[inp_func]:
-            if id(func) == id:
-                self.inp_funcs[inp_func].remove(func)
-                return
 
     #   @engine.add decorator to add components into engine
     def add(self, comp):
@@ -149,6 +139,9 @@ class Engine:
                 self.mouse_states[inv_button_dictionary[event.button]][0] = 0
                 self.mouse_states[inv_button_dictionary[event.button]][1] = 0
                 self.mouse_states[inv_button_dictionary[event.button]][2] = 1
+
+    def stop(self):
+        self.__is_running = False
 
     def run(self):
         self.__is_running = True

@@ -5,12 +5,11 @@ https://github.com/kadir014/heat2d
 
 """
 
-VERSION =       "0.0.2a2"
-VERSION_TUPLE = (0, 0, 2)
+VERSION =       "0.0.3"
+VERSION_TUPLE = (0, 0, 3)
 VERSION_STATE = "alpha"
 LICENSE =       "GNU General Public License v3.0"
 
-import time; _start = time.time()
 import sys
 PLATFORM = None
 if   sys.platform == "win32": PLATFORM = "Windows"
@@ -43,17 +42,13 @@ from heat2d.libs.terminal import REVERSE, RESET, FG
 if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
     if __USE_ANSI_COLORS:
         print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
-        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588")
-        print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588")
+        print(f"\u2588{FG.lightred}       HEAT2D       {RESET}\u2588 Version : {VERSION}")
+        print(f"\u2588{FG.orange}    GAME ENGINE     {RESET}\u2588 State   : {VERSION_STATE.capitalize()}")
         print("\u2588" + "\u2584"*20 + "\u2588\n")
-        print(f"Version: {VERSION}")
-        print(f"init. time: {str(time.time()-_start)[:4]}s\n")
     else:
         print(f"\u2588{REVERSE}" + "\u2584"*20 + f"{RESET}\u2588")
-        print(f"\u2588       HEAT2D       \u2588")
-        print(f"\u2588    GAME ENGINE     \u2588")
+        print(f"\u2588       HEAT2D       \u2588 Version : {VERSION}")
+        print(f"\u2588    GAME ENGINE     \u2588 State   : {VERSION_STATE.capitalize()}")
         print("\u2588" + "\u2584"*20 + "\u2588\n")
-        print(f"Version: {VERSION}")
-        print(f"init. time: {str(time.time()-_start)[:4]}s\n")
 
-del time, sys, os, pygame, libs, engine, errors, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG
+del sys, os, pygame, libs, engine, errors, window, gameobject, renderer, sprite, stage, timer, REVERSE, RESET, FG

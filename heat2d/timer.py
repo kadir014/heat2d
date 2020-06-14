@@ -4,11 +4,13 @@ from heat2d import DISPATCHER
 
 class Timer:
 
-    def __init__(self, interval):
+    def __init__(self, interval, loop=False):
         self.init_time = time.time()
         self.interval = interval
         self.time = 0
         self.func = None
+        self.loop = loop
+        self._l = False
 
         DISPATCHER["engine"].timers.append(self)
 
@@ -19,19 +21,23 @@ class Timer:
         self.func = func
 
     def update(self):
-        self.time = (time.time() - self.init_time) * 1000
-        if self.time >= self.interval:
-            self.time = 0
-            if self.func: self.func()
-            self.init_time = time.time()
+        if not self._l:
+            self.time = (time.time() - self.init_time) * 1000
+            if self.time >= self.interval:
+                self.time = 0
+                if self.func: self.func()
+                self.init_time = time.time()
+                if not self.loop: self._l = True
 
 
 class TickTimer:
 
-    def __init__(self, interval):
+    def __init__(self, interval, loop=False):
         self.interval = interval
         self.tick = 0
         self.func = None
+        self.loop = loop
+        self._l = False
 
         DISPATCHER["engine"].timers.append(self)
 
@@ -42,7 +48,9 @@ class TickTimer:
         self.func = func
 
     def update(self):
-        self.tick += 1
-        if self.tick >= self.interval:
-            self.tick = 0
-            if self.func: self.func()
+        if not self._l:
+            self.tick += 1
+            if self.tick >= self.interval:
+                self.tick = 0
+                if self.func: self.func()
+                if not self.loop: self._l = True

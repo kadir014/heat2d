@@ -15,7 +15,7 @@ def init():
 
     font_calibri = pygame.font.SysFont("Calibri", 14)
 
-    timer = Timer(300)
+    timer = Timer(300, loop=True)
 
     @timer.do
     def function():

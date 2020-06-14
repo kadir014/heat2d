@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://github.com/kadir014/kadir014.github.io/blob/master/assets/Heat2D%20Logo.png"><br>
   <img src="https://img.shields.io/badge/python-3%2B-green.svg">
-  <img src="https://img.shields.io/badge/pygame-1.9.6%2B-green.svg">
+  <img src="https://img.shields.io/badge/pygame-2%2B-green.svg">
   <img src="https://img.shields.io/badge/license-GPL%203.0-blue.svg">
   <img src="https://img.shields.io/badge/status-alpha-red.svg">
 </p>

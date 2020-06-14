@@ -22,7 +22,8 @@ class Renderer:
         gameobjects = DISPATCHER["engine"].stages[DISPATCHER["engine"].current_stage].gameobjects
         for gameobject in gameobjects:
             gameobject.update()
-            self.window.surface.blit(gameobject.sprite.surface, (gameobject.x - gameobject.sprite.surface_width/2, gameobject.y - gameobject.sprite.surface_height/2))
+            if gameobject.display:
+                self.window.surface.blit(gameobject.sprite.surface, (gameobject.x - gameobject.sprite.surface_width/2, gameobject.y - gameobject.sprite.surface_height/2))
 
         for layer in self.ui_layers:
             if layer.effect:
