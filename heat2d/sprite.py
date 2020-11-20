@@ -1,106 +1,80 @@
+import os
 import pygame
-from math import cos, sin, pi, atan2, degrees
-from heat2d.visuals import Rectangle
+import struct
+from math import atan2, degrees
+
+from heat2d import DISPATCHER
+from heat2d.libs.utils import sourcepath
+from heat2d.gl import Texture, Shader
 
 
 class Sprite:
-    def __init__(self, filename):
-        if isinstance(filename, Rectangle):
-            self.__source_image = pygame.Surface((filename.width, filename.height)).convert()
-            self.__source_image.fill(filename.color)
-        else:
-            self.__source_image = pygame.image.load(filename)
+    def __init__(self, filepath):
+        self.engine = DISPATCHER.engine
 
-        self.__calc(self.__source_image)
+        self.gameobject = None
+        self.filepath = filepath
+
+        source = pygame.image.load(self.filepath)
+        self.source_image = pygame.Surface((source.get_width()+2, source.get_height()+2), pygame.SRCALPHA)
+        self.source_image.blit(source, (1, 1))
+        self.source_size = self.source_image.get_size()
+        self.source_width, self.source_height = self.source_size
+
+        self.width = self.source_width
+        self.height = self.source_height
+
+        self.texture = Texture(self.source_image)
+        self.shader = Shader(
+                        vertex   = os.path.join(sourcepath, "shaders", "sprite.vsh"),
+                        fragment = os.path.join(sourcepath, "shaders", "sprite.fsh")
+                    )
 
         self.angle = 0
 
-        self.__blit(False)
+        self.__palette = None
+        self._palette_buffer = None
 
-    def __calc(self, source_surface):
-        self.source_image = source_surface.convert_alpha()
-        self.source_size = source_surface.get_size()
-        self.width, self.height = self.source_size
-
-        if self.width != self.height:
-            max_size = max(self.source_size)
-
-            temp_surf = pygame.Surface((max_size, max_size), pygame.SRCALPHA)
-            temp_surf.blit(self.source_image, (max_size / 2 - self.width / 2,
-                                               max_size / 2 - self.height / 2))
-
-            self.__calc(temp_surf)
-            return
-
-        self.width_constant = abs(self.width - (cos(pi / 4) * self.width) * 2)
-        self.height_constant = abs(self.height - (sin(pi / 4) * self.height) * 2)
-
-        self.surface = pygame.Surface((self.width + self.width_constant,
-                                       self.height + self.height_constant),
-                                       pygame.SRCALPHA).convert_alpha()
-
-        self.size = self.surface.get_size()
-        self.surface_width, self.surface_height = self.size
-
-        self.flip_horizontal = False
-        self.flip_vertical = False
-
-    def __blit(self, rotated=True):
-        self.surface.fill((255, 255, 255, 0))
-
-        if rotated:
-            self.rotated_surface = pygame.transform.rotate(self.source_image, self.angle)
-
-            self.surface.blit(self.rotated_surface, (-self.rotated_surface.get_width() / 2 + (self.width + self.width_constant) / 2,
-                                                     -self.rotated_surface.get_height() / 2 + (self.height + self.height_constant) / 2))
-
-        else:
-            self.surface.blit(self.source_image, (-self.width / 2 + (self.width + self.width_constant) / 2,
-                                                  -self.height / 2 + (self.height + self.height_constant) / 2))
-
-    def get_hitbox(self):
-        return (-self.rotated_surface.get_width() / 2 + (self.width + self.width_constant) / 2,
-                -self.rotated_surface.get_height() / 2 + (self.height + self.height_constant) / 2,
-                self.rotated_surface.get_width(), self.rotated_surface.get_height())
+    def __repr__(self):
+        return f"<heat2d.Sprite({self.source_width}x{self.source_height})>"
 
     def scale(self, scale):
-        self.__calc(pygame.transform.scale(self.__source_image, (int(self.width * scale), int(self.height * scale))))
-        self.__blit(False)
-
-    def set_size(self, size):
-        self.__calc(pygame.transform.scale(self.__source_image, size))
-        self.__blit(False)
+        self.width *= scale
+        self.height *= scale
 
     def rotate(self, angle):
-        self.angle = (self.angle + angle) % 360
-        self.__blit()
+        self.angle += angle
 
-    def rotate_to(self, x, y, tx, ty):
-        self.angle = (-degrees(atan2(y - ty,  x - tx)) - 180) % 360
-        self.__blit()
+    def rotate_to(self, vector):
+        #self.angle = (-degrees(atan2(self.gameobject.position.y - vector.y,  self.gameobject.position.x - vector.x)) - 180) % 360
+        self.angle = degrees(atan2(self.gameobject.position.y - vector.y,  self.gameobject.position.x - vector.x))
 
-    def flip(self, horizontal=False, vertical=False):
-        if horizontal:
-            if self.flip_horizontal: self.flip_horizontal = False
-            else: self.flip_horizontal = True
-            self.source_image = pygame.transform.flip(self.source_image, True, False)
-            self.__blit(False)
+    @property
+    def size(self): return (self.width, self.height)
 
-        elif vertical:
-            if self.flip_vertical: self.flip_vertical = False
-            else: self.flip_vertical = True
-            self.source_image = pygame.transform.flip(self.source_image, False, True)
-            self.__blit(False)
+    @size.setter
+    def size(self, val):
+        self.width = val[0]
+        self.height = val[1]
 
-    def orient(self, orientation):
-        if orientation.lower() == "east" and self.flip_horizontal:
-            self.flip(horizontal=True)
+    @property
+    def palette(self): return self.__palette
 
-        elif orientation.lower() == "west" and not self.flip_horizontal:
-            self.flip(horizontal=True)
+    @palette.setter
+    def palette(self, val):
+        self.__palette = val
 
-        elif orientation.lower() == "north" and self.flip_vertical:
-            self.flip(vertical=True)
+        colors = list()
+        for color in self.__palette:
+            colors.append(color.r/255)
+            colors.append(color.g/255)
+            colors.append(color.b/255)
+            colors.append(color.a/255)
 
-        elif orientation.lower() == "south" and not self.flip_vertical:
-            self.flip(vertical=True)
+        for i in range(256-len(self.__palette)):
+            colors.append(0.0)
+            colors.append(0.0)
+            colors.append(0.0)
+            colors.append(1.0)
+
+        self._palette_buffer = struct.pack(f"{256*4}f", *colors)

@@ -1,2 +1,6 @@
 graft heat2d/libs
 include heat2d/favicon.png
+include heat2d/shaders/default.vsh
+include heat2d/shaders/default.fsh
+include heat2d/shaders/sprite.vsh
+include heat2d/shaders/sprite.fsh

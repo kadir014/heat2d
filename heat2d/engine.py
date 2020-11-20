@@ -1,4 +1,5 @@
 import pygame
+
 from heat2d import DISPATCHER
 from heat2d.window import Window
 from heat2d.renderer import Renderer
@@ -8,30 +9,31 @@ from heat2d.libs.keys import key_dictionary, button_dictionary, inv_key_dictiona
 from heat2d.errors import NoStageDeclared
 from heat2d.ui.context import Context
 from heat2d import ui
-from heat2d.timer import Timer, TickTimer
+from heat2d.timer import Timer
+from heat2d.math.vector import Vector2
 
 
 class Engine:
-
     def __init__(self):
-        DISPATCHER["engine"] = self
+        DISPATCHER.engine = self
         pygame.init()
 
         self.window = Window((800, 600))
         self.renderer = Renderer()
 
         self.timers = list()
+        self.sounds = list()
 
         #working with a dictionary might be better than 3 lists
         self.key_states = {k: [0, 0, 0] for k in key_dictionary}
         self.mouse_states = {b: [0, 0, 0] for b in button_dictionary}
-        self.mouse_x, self.mouse_y = 0, 0
 
         self.current_stage = None
         self.stages = dict()
         self.gameobjects = list()
 
         self.__is_running = False
+        self._pause = False
 
         #Initialize modules
         ui.init()
@@ -39,38 +41,27 @@ class Engine:
     def __repr__(self):
         return f"<heat2d.Engine({self.window})>"
 
-    #   @engine.event decorator function to store input calls
-    def event(self, *args):
-        def wrapper(func):
-            self.event_funcs[func.__name__].append(func)
-            if func.__name__ == "every_tick": self.timers.append(TickTimer(func, args[0]))
-            elif func.__name__ == "every_time": self.timers.append(Timer(func, args[0]))
+    def pause(self):
+        self._pause = True
 
-        return wrapper
+    def resume(self):
+        self._pause = False
 
-    #   @engine.add decorator to add components into engine
-    def add(self, comp):
-        self._add(comp)
-        #if any(tuple(parent == Stage for parent in cls.__bases__)):
-        #    self.add(cls)
-        #else:
-        #    raise ValueError(f"{cls} is not a Stage")
+    def add(self, comp, *args, **kwargs):
+        if isinstance(comp, Context):
+            self.renderer.ui_contexts.append(comp)
 
-    def _add(self, *args):
-        for arg in args:
-            if isinstance(arg, Context):
-                self.renderer.ui_layers.append(arg)
+            return comp
 
-            else:
-                #Initialize objects
-                inst = arg()
+        else:
+            st = comp()
 
-                if isinstance(inst, Stage):
-                    self.stages[inst.__class__.__name__] = inst
-                    if len(self.stages) == 1: self.current_stage = inst.__class__.__name__
+            if isinstance(st, Stage):
+                self.stages[st.__class__.__name__] = st
+                if len(self.stages) == 1: self.current_stage = st.__class__.__name__
+                st.created()
 
-                elif isinstance(inst, GameObject):
-                    self.gameobjects.append(inst)
+                return st
 
     def change_stage(self, stage):
         if stage in self.stages: self.current_stage = stage
@@ -109,7 +100,7 @@ class Engine:
         return False
 
     def handle_events(self):
-        self.mouse_x, self.mouse_y = pygame.mouse.get_pos()
+        self.mouse = Vector2(pygame.mouse.get_pos())
         for k in self.key_states:
             self.key_states[k][1] = 0
             self.key_states[k][2] = 0
@@ -144,18 +135,25 @@ class Engine:
         self.__is_running = False
 
     def run(self):
-        self.__is_running = True
-
         if not self.current_stage: raise NoStageDeclared("You have to declare at least one stage to run the engine.")
 
-        while self.__is_running:
-            self.window.clock.tick(self.window.max_fps)
-            self.window.fps = self.window.clock.get_fps()
+        self.__is_running = True
 
+        while self.__is_running:
+            dt = self.window.clock.tick(self.window.max_fps)
+            self.window.deltatime = dt/1000
+            self.window.fps = self.window.clock.get_fps()
             self.handle_events()
+
             self.stages[self.current_stage].update()
 
+            for gameobject in self.stages[self.current_stage].gameobjects: gameobject.update()
+
             for timer in self.timers: timer.update()
-            self.renderer.draw()
+
+            for sound in self.sounds: sound.update()
+
+            self.renderer.render()
 
         pygame.quit()
+        self.renderer.ctx.release()

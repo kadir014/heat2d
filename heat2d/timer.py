@@ -1,56 +1,105 @@
 import time
+
 from heat2d import DISPATCHER
 
 
 class Timer:
+    def __init__(self):
+        self.funcs = {"every_tick":[], "every_microsec":[], "every_millisec":[],
+                      "every_second":[], "every_minute":[], "every_hour":[]}
 
-    def __init__(self, interval, loop=False):
-        self.init_time = time.time()
-        self.interval = interval
-        self.time = 0
-        self.func = None
-        self.loop = loop
-        self._l = False
-
-        DISPATCHER["engine"].timers.append(self)
+        DISPATCHER.engine.timers.append(self)
 
     def __repr__(self):
-        return f"heat2d.timer.Timer({self.time} ms)"
+        return f"<heat2d.Timer()>"
 
-    def do(self, func):
-        self.func = func
+    def every_tick(self, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_tick"].append({"func":func, "interval":interval, "loop":loop, "done":False, "tick":0})
+            return func
+        return inner_decorator
+
+    def every_microsec(self, func, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_microsec"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
+            return func
+        return func
+
+    def every_millisec(self, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_millisec"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
+            return func
+        return inner_decorator
+
+    def every_second(self, func, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_second"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
+            return func
+        return func
+
+    def every_minute(self, func, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_minute"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
+            return func
+        return func
+
+
+    def every_hour(self, func, interval, loop=True):
+        def inner_decorator(func):
+            self.funcs["every_hour"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
+            return func
+        return func
 
     def update(self):
-        if not self._l:
-            self.time = (time.time() - self.init_time) * 1000
-            if self.time >= self.interval:
-                self.time = 0
-                if self.func: self.func()
-                self.init_time = time.time()
-                if not self.loop: self._l = True
+        for timef in self.funcs["every_tick"]:
+            if not timef["done"]:
+                timef["tick"] += 1
+                if timef["tick"] > timef["interval"]:
+                    timef["tick"] = 0
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True
 
+        for timef in self.funcs["every_microsec"]:
+            if not timef["done"]:
+                timef["timef"] = (time.time() - timef["last"]) * 1000000
+                if timef["timef"] > timef["interval"]:
+                    timef["timef"] = 0
+                    timef["last"] = time.time()
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True
 
-class TickTimer:
+        for timef in self.funcs["every_millisec"]:
+            if not timef["done"]:
+                timef["timef"] = (time.time() - timef["last"]) * 1000
+                if timef["timef"] > timef["interval"]:
+                    timef["timef"] = 0
+                    timef["last"] = time.time()
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True
 
-    def __init__(self, interval, loop=False):
-        self.interval = interval
-        self.tick = 0
-        self.func = None
-        self.loop = loop
-        self._l = False
+        for timef in self.funcs["every_second"]:
+            if not timef["done"]:
+                timef["timef"] = time.time() - timef["last"]
+                if timef["timef"] > timef["interval"]:
+                    timef["timef"] = 0
+                    timef["last"] = time.time()
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True
 
-        DISPATCHER["engine"].timers.append(self)
+        for timef in self.funcs["every_minute"]:
+            if not timef["done"]:
+                timef["timef"] = (time.time() - timef["last"]) / 60
+                if timef["timef"] > timef["interval"]:
+                    timef["timef"] = 0
+                    timef["last"] = time.time()
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True
 
-    def __repr__(self):
-        return f"heat2d.timer.TickTimer({self.tick} ticks)"
-
-    def do(self, func):
-        self.func = func
-
-    def update(self):
-        if not self._l:
-            self.tick += 1
-            if self.tick >= self.interval:
-                self.tick = 0
-                if self.func: self.func()
-                if not self.loop: self._l = True
+        for timef in self.funcs["every_hour"]:
+            if not timef["done"]:
+                timef["timef"] = (time.time() - timef["last"]) / 3600
+                if timef["timef"] > timef["interval"]:
+                    timef["timef"] = 0
+                    timef["last"] = time.time()
+                    timef["func"]()
+                    if not timef["loop"]: timef["done"] = True

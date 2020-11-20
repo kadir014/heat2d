@@ -1,32 +1,63 @@
 import pygame
 import os
+import struct
+
+from heat2d import DISPATCHER
+from heat2d.math import Vector2
+from heat2d.libs.color import Color
+from heat2d.libs.utils import sourcepath
 
 
 class Window:
-
     def __init__(self, size, title="Heat2D Game Project", icon=None, clear_color=(0, 0, 0)):
+        self.engine = DISPATCHER.engine
         self._width = size[0]
         self._height = size[1]
         self._size = size
         self._title = title
         self._icon = icon
-        self.clear_color = clear_color
 
         if icon: self.icon = icon
-        else: self.icon = os.path.join(__file__[:len(__file__) - len("window.py")], "favicon.png")
+        else: self.icon = os.path.join(sourcepath, "favicon.png")
         self.size = size
         self.title = self._title
 
-        self.center_x = self.width / 2
-        self.center_y = self.height / 2
-        self.center = (self.center_x, self.center_y)
+        self.fullscreen = False
+
+        if isinstance(clear_color, Color):
+            self.clear_color = clear_color
+        else:
+            self.clear_color = Color(clear_color)
+
+        self.center = Vector2(self.width / 2, self.height / 2)
 
         self.clock = pygame.time.Clock()
         self.max_fps = 60
         self.fps = self.max_fps
+        self.deltatime = 0
 
     def __repr__(self):
-        return f"<heat2d.Window({self.size}, {self.title})>"
+        return f"<heat2d.Window({self.width}x{self.height}, {self.title})>"
+
+    def take_screenshot(self, filepath, area=None):
+        snap = pygame.image.fromstring(self.engine.renderer.ctx.screen.read(), self.size, "RGB")
+        if area:
+            surf = pygame.Surface((area[2]-area[0], area[3]-area[1]))
+            surf.blit(snap, (-area[0], -area[1]))
+            pygame.image.save(surf, filepath)
+        else:
+            pygame.image.save(snap, filepath)
+
+    def toggle_fullscreen(self):
+        if self.fullscreen:
+            pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self._width, self._height))
+            self.fullscreen = False
+
+        else:
+            pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL|pygame.FULLSCREEN)
+            self.surface = pygame.Surface((self._width, self._height))
+            self.fullscreen = True
 
     @property
     def width(self): return self._width
@@ -34,7 +65,8 @@ class Window:
     @width.setter
     def width(self, val):
         self._width = val
-        self.surface = pygame.display.set_mode((self._width, self._height))
+        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
+        self.surface = pygame.Surface((self._width, self._height))
 
     @property
     def height(self): return self._height
@@ -42,7 +74,8 @@ class Window:
     @height.setter
     def height(self, val):
         self._height = val
-        self.surface = pygame.display.set_mode((self._width, self._height))
+        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
+        self.surface = pygame.Surface((self._width, self._height))
 
     @property
     def size(self): return self._size
@@ -50,7 +83,10 @@ class Window:
     @size.setter
     def size(self, val):
         self._size = val
-        self.surface = pygame.display.set_mode(self._size)
+        self._width = self._size[0]
+        self._height = self._size[1]
+        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
+        self.surface = pygame.Surface((self._width, self._height))
 
     @property
     def title(self): return self._title

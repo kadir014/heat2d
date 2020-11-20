@@ -1,14 +1,15 @@
 import socket
 import threading
 import time
+
 from heat2d.errors import NetworkingError
+
 
 HOSTNAME  = socket.gethostname()
 LOCALHOST = socket.gethostbyname(HOSTNAME)
 
 
 class Header:
-
     def __init__(self, string):
         i = 1
         s = ""
@@ -26,7 +27,6 @@ class Header:
 
 
 class ConnectedClient(threading.Thread):
-
     def __init__(self, s, address, id, server):
         super().__init__()
         self.socket = s
@@ -68,7 +68,6 @@ class ConnectedClient(threading.Thread):
 
 
 class Server(threading.Thread):
-
     def __init__(self, address, port):
         super().__init__()
         self.address, self.port = address, port
@@ -100,7 +99,6 @@ class Server(threading.Thread):
 
 
 class Connection(threading.Thread):
-
     def __init__(self, address, port):
         super().__init__()
         self.address, self.port = address, port

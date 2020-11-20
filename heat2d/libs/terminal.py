@@ -1,8 +1,8 @@
-from heat2d import PLATFORM
+from heat2d import specs
 import os
 
 def clear():
-    if PLATFORM == "Windows": os.system("cls")
+    if specs.OS.name == "Windows": os.system("cls")
     else: os.system("clear")
 
 #ANSI Escape Graphic Sequences

@@ -1,4 +1,5 @@
 __pycache__/
 dev/
 dist/
+olddist/
 heat2d.egg-info/

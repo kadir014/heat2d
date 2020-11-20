@@ -1,24 +1,31 @@
+from heat2d import DISPATCHER
+from heat2d.math import Vector2
+
+
 class GameObject:
+    def __init__(self, stage):
+        self.position = Vector2(0, 0)
+        self._sprite = None
+        self.stage = stage
 
-    def __init__(self, clone=False):
-        self.x = 0
-        self.y = 0
-        self.sprite = None
-        self.stage = None
-        self.clone = clone
+        self.visible = True
 
-        self.display = True
+    def __repr__(self):
+        return f"<heat2d.GameObject()>"
+
+    def created(self):
+        pass
 
     def update(self):
         pass
 
-    def create_clone(self):
-        clo = self.__class__()
-        clo.clone = True
-        clo.stage = self.stage
-        clo.created_as_clone()
-        self.stage.gameobjects.append(clo)
+    def draw(self):
+        pass
 
-    def delete(self):
-        if self.clone:
-            self.stage.gameobjects.remove(self)
+    @property
+    def sprite(self): return self._sprite
+
+    @sprite.setter
+    def sprite(self, val):
+        val.gameobject = self
+        self._sprite = val
