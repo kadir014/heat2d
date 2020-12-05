@@ -12,21 +12,11 @@ Heat2D is a simple and concise 2D game engine. The main purpose of the engine is
 
 Heat2D is easy to use, you can access [the documentation here](https://kadir014.github.io/projects/heat2d/index.html). You can use the API Reference, or read the getting started page and tutorials if you are a beginner.
 
-## Table of Contents
-- [Features](#features)
-- [Documentation](#documentation)
-- [License](#license)
+You can join to the official [Discord Server](https://discord.gg/ctbn4Jbbr8) for further information.
 
-## Features
-Some of the main features Heat2D provides are
-- Stage Management
-- Sprites & Animation
-- Easy Input Handling
-- User Interface Tools
-- Extra Handy Libraries
-
-## Documentation
-You can access [the documentation here](https://kadir014.github.io/projects/heat2d/index.html)
+## Links
+- Documentation : https://kadir014.github.io/projects/heat2d/index.html
+- Discord server : https://discord.gg/ctbn4Jbbr8
 
 ## License
 [GPL 3.0](LICENSE) © Kadir Aksoy
