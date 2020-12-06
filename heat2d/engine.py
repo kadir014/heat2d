@@ -4,7 +4,7 @@ from heat2d import DISPATCHER
 from heat2d.window import Window
 from heat2d.renderer import Renderer
 from heat2d.stage import Stage
-from heat2d.gameobject import GameObject
+from heat2d.game_object import GameObject
 from heat2d.libs.keys import key_dictionary, button_dictionary, inv_key_dictionary, inv_button_dictionary
 from heat2d.errors import NoStageDeclared
 from heat2d.ui.context import Context
@@ -147,7 +147,7 @@ class Engine:
 
             self.stages[self.current_stage].update()
 
-            for gameobject in self.stages[self.current_stage].gameobjects: gameobject.update()
+            for gameobject in self.stages[self.current_stage].game_objects: gameobject.update()
 
             for timer in self.timers: timer.update()
 

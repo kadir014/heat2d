@@ -3,10 +3,11 @@ from heat2d.math import Vector2
 
 
 class GameObject:
-    def __init__(self, stage):
+    def __init__(self, stage, tag: str = "Untagged"):
         self.position = Vector2(0, 0)
         self._sprite = None
         self.stage = stage
+        self.tag: str = tag
 
         self.visible = True
 

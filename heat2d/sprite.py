@@ -46,7 +46,7 @@ class Sprite:
         self.angle += angle
 
     def rotate_to(self, vector):
-        #self.angle = (-degrees(atan2(self.gameobject.position.y - vector.y,  self.gameobject.position.x - vector.x)) - 180) % 360
+        #self.angle = (-degrees(atan2(self.game_object.position.y - vector.y,  self.game_object.position.x - vector.x)) - 180) % 360
         self.angle = degrees(atan2(self.gameobject.position.y - vector.y,  self.gameobject.position.x - vector.x))
 
     @property

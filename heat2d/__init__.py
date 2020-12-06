@@ -35,7 +35,7 @@ from heat2d.version import *
 from heat2d.libs.color import Color, Palette
 from heat2d.engine import     Engine
 from heat2d.stage import      Stage
-from heat2d.gameobject import GameObject
+from heat2d.game_object import GameObject
 from heat2d.sprite import     Sprite
 from heat2d.timer import      Timer
 from heat2d import            audio
@@ -56,4 +56,4 @@ if "HEAT2D_HIDE_WELCOME_MESSAGE" not in os.environ:
         print(f"\u2588    GAME ENGINE     \u2588 State   : {HEAT2D_VERSION_STATE.capitalize()}")
         print("\u2588" + "\u2584"*20 + "\u2588\n")
 
-del os, pygame, libs, engine, errors, window, gameobject, renderer, sprite, stage, timer, math, REVERSE, RESET, FG
+del os, pygame, libs, engine, errors, window, game_object, renderer, sprite, stage, timer, math, REVERSE, RESET, FG

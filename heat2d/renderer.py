@@ -29,7 +29,7 @@ class Renderer:
         self.gamefbo.use()
         self.gamefbo.clear(*self.engine.window.clear_color.normalise().to_tuple())
 
-        for i, gameobject in enumerate(self.engine.stages[self.engine.current_stage].gameobjects):
+        for i, gameobject in enumerate(self.engine.stages[self.engine.current_stage].game_objects):
 
             if gameobject.visible:
 
@@ -37,7 +37,7 @@ class Renderer:
 
                 gameobject.sprite.shader.set_uniform("rotation", radians(gameobject.sprite.angle))
                 gameobject.sprite.shader.set_uniform("position", gameobject.position.x / self.engine.window.width, gameobject.position.y / self.engine.window.height)
-                #gameobject.sprite.shader.set_uniform("size", (gameobject.sprite.source_width-gameobject.sprite.width) / self.engine.window.width, (gameobject.sprite.source_height-gameobject.sprite.height) / self.engine.window.height)
+                #game_object.sprite.shader.set_uniform("size", (game_object.sprite.source_width-game_object.sprite.width) / self.engine.window.width, (game_object.sprite.source_height-game_object.sprite.height) / self.engine.window.height)
                 gameobject.sprite.shader.set_uniform("size",
                         gameobject.sprite.width / self.engine.window.width,
                         gameobject.sprite.height / self.engine.window.height)
