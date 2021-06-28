@@ -19,4 +19,4 @@ You can join to the official [Discord Server](https://discord.gg/ctbn4Jbbr8) for
 - Discord server : https://discord.gg/ctbn4Jbbr8
 
 ## License
-[LGPL 3.0](LICENSE) © Kadir Aksoy
+[GPL 3.0](LICENSE) © Kadir Aksoy

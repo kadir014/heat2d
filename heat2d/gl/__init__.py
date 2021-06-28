@@ -1,5 +1,5 @@
 #  This file is a part of the Heat2D Project and  #
-#  distributed under the LGPL 3 license           #
+#  distributed under the GPL 3 license            #
 #                                                 #
 #           HEAT2D Game Engine Project            #
 #            Copyright © Kadir Aksoy              #
