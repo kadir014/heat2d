@@ -1,5 +1,14 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 from heat2d import specs
 import os
+
 
 def clear():
     if specs.OS.name == "Windows": os.system("cls")
@@ -14,6 +23,7 @@ REVERSE =   "\033[07m"
 
 def rgb(rgb):
     return f"\033[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m"
+
 
 class FG:
     black =      "\033[30m"
@@ -32,6 +42,7 @@ class FG:
     lightgreen = "\033[92m"
     lightblue =  "\033[94m"
     lightcyan =  "\033[96m"
+
 
 class BG:
     black =      "\033[40m"

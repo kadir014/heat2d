@@ -3,3 +3,4 @@ dev/
 dist/
 olddist/
 heat2d.egg-info/
+backup/

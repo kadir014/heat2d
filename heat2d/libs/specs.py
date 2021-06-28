@@ -1,8 +1,20 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import sys
 import platform
 import psutil
 import cpuinfo
-import subprocess
+import pygame
+
+#This instance has to be created before creating a window
+pygame.display.init()
+DISPLAYINFO = pygame.display.Info()
 
 
 class OS:
@@ -25,6 +37,19 @@ class OS:
         # NOTE: Debian-64 returns x86_64
         if platform.machine().endswith("64"): OS.bit = 64
         elif platform.machine().endswith("86"): OS.bit = 32
+
+
+class Monitor:
+    width = int()
+    height = int()
+    bitsize = int()
+    bytesize = int()
+
+    def update_info():
+        Monitor.width = DISPLAYINFO.current_w
+        Monitor.height = DISPLAYINFO.current_h
+        Monitor.bitsize = DISPLAYINFO.bitsize
+        Monitor.bytesize = DISPLAYINFO.bytesize
 
 
 class RAM:
@@ -71,6 +96,14 @@ class CPU:
         CPU.percent       = psutil.cpu_percent()
 
 
+class GPU:
+    vram = int()
+    #TODO: Graphics Card brand, name, producer, usage, ram etc...
+
+    def update_info():
+        GPU.vram = DISPLAYINFO.video_mem
+
+
 class Disk:
     device     = str()
     filesystem = str()
@@ -100,6 +133,7 @@ class Disk:
 def print_specs(update=False):
     if update:
         OS.update_info()
+        Monitor.update_info()
         RAM.update_info()
         CPU.update_info()
         Disk.update_info()
@@ -110,6 +144,12 @@ def print_specs(update=False):
     print(f"  Simple na  : {OS.simple_name}")
     print(f"  Network n  : {OS.network_name}")
     print(f"  Bit        : {OS.bit}")
+    print("")
+    print("Monitor")
+    print(f"  Width      : {Monitor.width} px")
+    print(f"  Height     : {Monitor.height} px")
+    print(f"  Bit-size   : {Monitor.bitsize}")
+    print(f"  Byte-size  : {Monitor.bytesize}")
     print("")
     print("Memory")
     print(f"  Usage      : {RAM.percent}%")

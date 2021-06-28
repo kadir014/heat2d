@@ -6,4 +6,9 @@
 #       https://github.com/kadir014/heat2d        #
 
 
-from heat2d.math.vector import Vector2
+
+class Line:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.normal = (self.end - self.start).perp().normalize()

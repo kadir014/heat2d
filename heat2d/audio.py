@@ -1,10 +1,16 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import pygame
-import time
 
 from heat2d import DISPATCHER
 
 
-master_volume = 1
 
 class Sound:
     def __init__(self, filename):
@@ -27,6 +33,8 @@ class Sound:
         return f"<heat2d.Sound({self.filename}, volume={int(self.volume * 100)}%)>"
 
     def play(self):
+        if not self.dynamic:
+            self.channel.set_volume(self.left * self.volume * DISPATCHER.engine.master_volume * DISPATCHER.engine.master_volume_left, self.right * self.volume * DISPATCHER.engine.master_volume * DISPATCHER.engine.master_volume_right)
         self.channel.play(self.source_sound)
 
     def set_source(self, source, focus):
@@ -52,4 +60,4 @@ class Sound:
                 self.left = 1
                 self.right = 1
 
-            self.channel.set_volume(self.left * self.volume * volume * master_volume, self.right * self.volume * volume * master_volume)
+            self.channel.set_volume(self.left * self.volume * volume * DISPATCHER.engine.master_volume * DISPATCHER.engine.master_volume_left, self.right * self.volume * volume * DISPATCHER.engine.master_volume * DISPATCHER.engine.master_volume_right)

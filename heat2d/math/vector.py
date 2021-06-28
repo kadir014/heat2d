@@ -1,26 +1,60 @@
-from math import sqrt, sin, cos, atan2, radians
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
+from math import sqrt, sin, cos, atan2, radians, degrees
+
 
 
 class Vector2:
     def __init__(self, a, b=None):
-        if isinstance(a, (tuple, list)):
-            self.x = a[0]
-            self.y = a[1]
+        if isinstance(a, Vector2):
+            self.__x = a.x
+            self.__y = a.y
+
+        elif isinstance(a, (tuple, list)):
+            self.__x = a[0]
+            self.__y = a[1]
 
         elif isinstance(a, (int, float)):
             if b:
                 if isinstance(b, (int, float)):
-                    self.x = a
-                    self.y = b
-                else: raise ValueError("Invalid vector argument")
+                    self.__x = a
+                    self.__y = b
+                else:
+                    raise TypeError(f"expected arguments\nVector2(x, y)\nVector2((x, y))\nVector2(length)\nVector2(Vector2)\nbut got unexpected type '{type(b).__name__}'")
             else:
-                self.x = a
-                self.y = 0
+                self.__x = a
+                self.__y = 0
 
-        else: raise ValueError("Invalid vector argument")
+        else:
+            raise TypeError(f"expected arguments\nVector2(x, y)\nVector2((x, y))\nVector2(length)\nVector2(Vector2)\nbut got unexpected type '{type(a).__name__}'")
+
+        self._x_setter = None
+        self._y_setter = None
 
     def __repr__(self):
-        return f"<heat2d.Vector2({self.x}, {self.y})>"
+        return f"<heat2d.math.Vector2({self.x}, {self.y})>"
+
+    @property
+    def x(self): return self.__x
+
+    @property
+    def y(self): return self.__y
+
+    @x.setter
+    def x(self, val):
+        self.__x = val
+        if self._x_setter: self._x_setter()
+
+    @y.setter
+    def y(self, val):
+        self.__y = val
+        if self._y_setter: self._y_setter()
 
     def __add__(self, other):
         if isinstance(other, Vector2):
@@ -30,7 +64,7 @@ class Vector2:
             return Vector2(self.x + other, self.y + other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for +: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for +: 'Vector2' and '{type(other).__name__}'")
 
     def __sub__(self, other):
         if isinstance(other, Vector2):
@@ -40,7 +74,7 @@ class Vector2:
             return Vector2(self.x - other, self.y - other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for -: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for -: 'Vector2' and '{type(other).__name__}'")
 
     def __mul__(self, other):
         if isinstance(other, Vector2):
@@ -50,7 +84,7 @@ class Vector2:
             return Vector2(self.x * other, self.y * other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for *: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for *: 'Vector2' and '{type(other).__name__}'")
 
     def __truediv__(self, other):
         if isinstance(other, Vector2):
@@ -60,7 +94,7 @@ class Vector2:
             return Vector2(self.x / other, self.y / other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for /: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for /: 'Vector2' and '{type(other).__name__}'")
 
     def __floordiv__(self, other):
         if isinstance(other, Vector2):
@@ -70,7 +104,7 @@ class Vector2:
             return Vector2(self.x // other, self.y // other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for //: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for //: 'Vector2' and '{type(other).__name__}'")
 
     def __iadd__(self, other):
         if isinstance(other, Vector2):
@@ -80,7 +114,7 @@ class Vector2:
             self = Vector2(self.x + other, self.y + other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for +: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for +: 'Vector2' and '{type(other).__name__}'")
 
         return self
 
@@ -92,7 +126,7 @@ class Vector2:
             self = Vector2(self.x - other, self.y - other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for -: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for -: 'Vector2' and '{type(other).__name__}'")
 
         return self
 
@@ -104,7 +138,7 @@ class Vector2:
             self = Vector2(self.x * other, self.y * other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for *: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for *: 'Vector2' and '{type(other).__name__}'")
 
         return self
 
@@ -116,7 +150,7 @@ class Vector2:
             self = Vector2(self.x / other, self.y / other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for /: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for /: 'Vector2' and '{type(other).__name__}'")
 
         return self
 
@@ -128,27 +162,9 @@ class Vector2:
             return Vector2(self.x // other, self.y // other)
 
         else:
-            raise TypeError(f"unsupported operand type(s) for //: 'Vector2' and '{other.__class__.__name__}'")
+            raise TypeError(f"unsupported operand type(s) for //: 'Vector2' and '{type(other).__name__}'")
 
         return self
-
-    def __lt__(self, other):
-        return self.length() < other.length()
-
-    def __gt__(self, other):
-        return self.length() > other.length()
-
-    def __le__(self, other):
-        return self.length() <= other.length()
-
-    def __ge__(self, other):
-        return self.length() >= other.length()
-
-    def __eq__(self, other):
-        return self.length() == other.length()
-
-    def __ne__(self, other):
-        return self.length() != other.length()
 
     def __neg__(self):
         return self * -1
@@ -166,11 +182,15 @@ class Vector2:
         return atan2((vector.y-self.y), (vector.x-self.x))
 
     def set_angle(self, angle):
-        self.x *= cos(radians(angle))
-        self.y *= sin(radians(angle))
+        r = radians(-angle)
+        c = cos(r)
+        s = sin(r)
+        x = self.x * c - self.y * s
+        y = self.x * s + self.y * c
+        self.x, self.y = x, y
 
     def get_angle(self):
-        return atan2(self.y, self.x)
+        return degrees(atan2(self.y, self.x))
 
     def rotate(self, angle):
         self.set_angle(self.get_angle() + angle)
@@ -195,7 +215,10 @@ class Vector2:
     def inverse(self):
         return Vector2(1 / self.x, 1 / self.y)
 
-    def normalise(self):
+    def normalize(self):
         l = self.length()
         if l == 0: return self
         else: return self / l
+
+    def perp(self):
+        return Vector2(self.y, -self.x)

@@ -2,7 +2,7 @@
   <img src="https://github.com/kadir014/kadir014.github.io/blob/master/assets/Heat2D%20Logo.png"><br>
   <img src="https://img.shields.io/badge/python-3%2B-green.svg">
   <img src="https://img.shields.io/badge/license-GPL%203.0-blue.svg">
-  <img src="https://img.shields.io/badge/version-0.0.4-yellow">
+  <img src="https://img.shields.io/badge/version-0.0.5-yellow">
   <img src="https://img.shields.io/badge/status-alpha-red.svg">
   <img src="https://pepy.tech/badge/heat2d">
 </p>
@@ -19,4 +19,4 @@ You can join to the official [Discord Server](https://discord.gg/ctbn4Jbbr8) for
 - Discord server : https://discord.gg/ctbn4Jbbr8
 
 ## License
-[GPL 3.0](LICENSE) © Kadir Aksoy
+[LGPL 3.0](LICENSE) © Kadir Aksoy

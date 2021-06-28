@@ -1,4 +1,14 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import pygame
+
+
 
 key_dictionary = {
                   "backspace" : pygame.K_BACKSPACE,
@@ -127,7 +137,7 @@ key_dictionary = {
                   "lmeta" : pygame.K_LMETA,
                   "lsuper" : pygame.K_LSUPER,
                   "rsuper" : pygame.K_RSUPER,
-                  "mode" : pygame.K_MODE,
+                  "altgr" : pygame.K_MODE,
                   "help" : pygame.K_HELP,
                   "print" : pygame.K_PRINT,
                   "sysreq" : pygame.K_SYSREQ,
@@ -145,5 +155,21 @@ button_dictionary = {
                      "wheeldown": 5
                     }
 
-inv_key_dictionary =    {v: k for k, v in key_dictionary.items()}
-inv_button_dictionary = {v: k for k, v in button_dictionary.items()}
+controller_dictionary = {
+                         "a" : 2,
+                         "b" : 1,
+                         "x" : 3,
+                         "y" : 0,
+                         "rstick" : 11,
+                         "lstick" : 10,
+                         "r1" : 5,
+                         "r2" : 7,
+                         "l1" : 4,
+                         "l2" : 6,
+                         "start" : 9,
+                         "select" : 8
+                        }
+
+inv_key_dictionary        = {v: k for k, v in key_dictionary.items()}
+inv_button_dictionary     = {v: k for k, v in button_dictionary.items()}
+inv_controller_dictionary = {v: k for k, v in controller_dictionary.items()}

@@ -6,4 +6,8 @@
 #       https://github.com/kadir014/heat2d        #
 
 
-from heat2d.math.vector import Vector2
+
+class Trigger:
+    def __init__(self, name, hitarea):
+        self.name = name
+        self.hitarea = hitarea

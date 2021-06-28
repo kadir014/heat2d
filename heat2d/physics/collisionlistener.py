@@ -6,4 +6,12 @@
 #       https://github.com/kadir014/heat2d        #
 
 
-from heat2d.math.vector import Vector2
+
+class CollisionListener:
+    def __init__(self):
+        self.triggers    = False
+        self.gameobjects = False
+        self.tiles       = False
+
+    def __repr__(self):
+        return f"<heat2d.physics.CollisionListener(triggers={self.triggers}, gameobjects={self.gameobjects}, tiles={self.tiles})>"

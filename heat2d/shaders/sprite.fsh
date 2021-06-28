@@ -1,4 +1,5 @@
 #version 330
+precision highp float;
 
 in vec2 UV;
 
@@ -14,6 +15,7 @@ uniform vec4 palette[256];
 
 
 vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
+  if (rotation>0 && rotation<360){
     float cosa = cos(rotation);
     float sina = sin(rotation);
     uv -= pivot;
@@ -21,6 +23,9 @@ vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
         cosa * uv.x - sina * uv.y,
         cosa * uv.y + sina * uv.x
     ) + pivot;
+  } else {
+    return uv;
+  }
 }
 
 vec2 scaleUV(vec2 uv, vec2 pos, vec2 scale){

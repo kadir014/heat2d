@@ -8,9 +8,8 @@ def get_data(path):
 setup(
     name="heat2d",
     packages = find_packages(),
-    #data_files=[('libs', ['keys.py', "terminal.py"]), ('', ['favicon.png'])],
     include_package_data=True,
-    version="0.0.4",
+    version="0.0.5",
     author="Kadir Aksoy",
     author_email="kursatkadir014@gmail.com",
     description="A simple 2D game engine",
@@ -28,8 +27,9 @@ setup(
     python_requires='>=3.6',
     install_requires=[
                       "pygame>=2.0.0.dev3",
-                      "moderngl==5.6.2",
-                      "psutil==5.7.3",
-                      "py-cpuinfo==7.0.0"
+                      "moderngl>=5.6.2",
+                      "psutil>=5.7.3",
+                      "py-cpuinfo>=7.0.0",
+                      "requests>=2.25.0"
                       ]
 )

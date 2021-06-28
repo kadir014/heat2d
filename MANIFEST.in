@@ -4,3 +4,13 @@ include heat2d/shaders/default.vsh
 include heat2d/shaders/default.fsh
 include heat2d/shaders/sprite.vsh
 include heat2d/shaders/sprite.fsh
+include heat2d/shaders/post_anaglyph.fsh
+include heat2d/shaders/post_blur7.fsh
+include heat2d/shaders/post_blur11.fsh
+include heat2d/shaders/post_blur13.fsh
+include heat2d/shaders/post_blur15.fsh
+include heat2d/shaders/post_trail.fsh
+include heat2d/shaders/post_hsv.fsh
+include heat2d/shaders/post_rgb.fsh
+include heat2d/shaders/post_correction.fsh
+include heat2d/shaders/post_vignette.fsh

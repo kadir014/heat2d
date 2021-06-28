@@ -6,4 +6,6 @@
 #       https://github.com/kadir014/heat2d        #
 
 
-from heat2d.math.vector import Vector2
+from heat2d.animation.spritesheet import SpriteSheet
+
+del spritesheet

@@ -1,28 +1,39 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import pygame
 import os
-import struct
 
 from heat2d import DISPATCHER
 from heat2d.math import Vector2
-from heat2d.libs.color import Color
-from heat2d.libs.utils import sourcepath
+from heat2d.color import Color
+from heat2d.libs.utils import source_path
+from heat2d.gl.texture import Texture
+
 
 
 class Window:
     def __init__(self, size, title="Heat2D Game Project", icon=None, clear_color=(0, 0, 0)):
         self.engine = DISPATCHER.engine
-        self._width = size[0]
-        self._height = size[1]
-        self._size = size
-        self._title = title
-        self._icon = icon
-
-        if icon: self.icon = icon
-        else: self.icon = os.path.join(sourcepath, "favicon.png")
-        self.size = size
-        self.title = self._title
+        self.__width = size[0]
+        self.__height = size[1]
+        self.__size = size
+        self.__title = title
+        self.__icon = icon
 
         self.fullscreen = False
+
+        if icon: self.icon = icon
+        else: self.icon = source_path("favicon.png")
+        self.__updategl = False
+        self.size = size
+        self.__updategl = True
+        self.title = self.__title
 
         if isinstance(clear_color, Color):
             self.clear_color = clear_color
@@ -31,13 +42,11 @@ class Window:
 
         self.center = Vector2(self.width / 2, self.height / 2)
 
-        self.clock = pygame.time.Clock()
-        self.max_fps = 60
-        self.fps = self.max_fps
-        self.deltatime = 0
-
     def __repr__(self):
         return f"<heat2d.Window({self.width}x{self.height}, {self.title})>"
+
+    def is_active(self):
+        return pygame.display.get_active()
 
     def take_screenshot(self, filepath, area=None):
         snap = pygame.image.fromstring(self.engine.renderer.ctx.screen.read(), self.size, "RGB")
@@ -50,56 +59,122 @@ class Window:
 
     def toggle_fullscreen(self):
         if self.fullscreen:
-            pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
-            self.surface = pygame.Surface((self._width, self._height))
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
             self.fullscreen = False
 
         else:
-            pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL|pygame.FULLSCREEN)
-            self.surface = pygame.Surface((self._width, self._height))
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL|pygame.FULLSCREEN|pygame.HWSURFACE)
+            self.surface = pygame.Surface((self.__width, self.__height))
             self.fullscreen = True
 
     @property
-    def width(self): return self._width
+    def width(self): return self.__width
 
     @width.setter
     def width(self, val):
-        self._width = val
-        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
-        self.surface = pygame.Surface((self._width, self._height))
+        self.__width = val
+
+        if self.fullscreen:
+            self.toggle_fullscreen()
+
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
+
+            self.toggle_fullscreen()
+
+        else:
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
 
     @property
-    def height(self): return self._height
+    def height(self): return self.__height
 
     @height.setter
     def height(self, val):
-        self._height = val
-        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
-        self.surface = pygame.Surface((self._width, self._height))
+        self.__height = val
+
+        if self.fullscreen:
+            self.toggle_fullscreen()
+
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
+
+            self.toggle_fullscreen()
+
+        else:
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
 
     @property
-    def size(self): return self._size
+    def size(self): return self.__size
 
     @size.setter
     def size(self, val):
-        self._size = val
-        self._width = self._size[0]
-        self._height = self._size[1]
-        pygame.display.set_mode((self._width, self._height), pygame.DOUBLEBUF|pygame.OPENGL)
-        self.surface = pygame.Surface((self._width, self._height))
+        self.__size = val
+        self.__width = self.__size[0]
+        self.__height = self.__size[1]
+
+        if self.fullscreen:
+            self.toggle_fullscreen()
+
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
+
+            self.toggle_fullscreen()
+
+        else:
+            pygame.display.set_mode((self.__width, self.__height), pygame.DOUBLEBUF|pygame.OPENGL)
+            self.surface = pygame.Surface((self.__width, self.__height))
+
+            if self.__updategl:
+                self.engine.renderer.ctx.viewport = (0, 0, self.__width, self.__height)
+
+                self.engine.renderer.texture = Texture(self.surface, ctx=self.engine.renderer.ctx)
+                self.engine.renderer.gamefbo = self.engine.renderer.ctx.framebuffer((self.engine.renderer.texture.texobj,))
 
     @property
-    def title(self): return self._title
+    def title(self): return self.__title
 
     @title.setter
     def title(self, val):
-        self._title = val
-        pygame.display.set_caption(self._title)
+        self.__title = val
+        pygame.display.set_caption(self.__title)
 
     @property
-    def icon(self): return self._icon
+    def icon(self): return self.__icon
 
     @icon.setter
     def icon(self, val):
-        self._icon = val
-        pygame.display.set_icon(pygame.image.load(self._icon))
+        self.__icon = val
+        pygame.display.set_icon(pygame.image.load(self.__icon))

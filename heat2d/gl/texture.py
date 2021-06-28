@@ -1,3 +1,11 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import moderngl
 import pygame
 
@@ -8,6 +16,7 @@ filters = {
            "nearest" : moderngl.NEAREST,
            "linear"  : moderngl.LINEAR
           }
+
 
 
 class Texture:
@@ -24,7 +33,6 @@ class Texture:
             len(self.format),
             pygame.image.tostring(self.surface, self.format, True)
         )
-
         self.texobj.repeat_x = False
         self.texobj.repeat_y = False
         self.filter_min = filters["nearest"]

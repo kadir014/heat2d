@@ -1,6 +1,15 @@
+#  This file is a part of the Heat2D Project and  #
+#  distributed under the LGPL 3 license           #
+#                                                 #
+#           HEAT2D Game Engine Project            #
+#            Copyright © Kadir Aksoy              #
+#       https://github.com/kadir014/heat2d        #
+
+
 import time
 
 from heat2d import DISPATCHER
+
 
 
 class Timer:
@@ -19,11 +28,11 @@ class Timer:
             return func
         return inner_decorator
 
-    def every_microsec(self, func, interval, loop=True):
+    def every_microsec(self, interval, loop=True):
         def inner_decorator(func):
             self.funcs["every_microsec"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
             return func
-        return func
+        return inner_decorator
 
     def every_millisec(self, interval, loop=True):
         def inner_decorator(func):
@@ -31,24 +40,23 @@ class Timer:
             return func
         return inner_decorator
 
-    def every_second(self, func, interval, loop=True):
+    def every_second(self, interval, loop=True):
         def inner_decorator(func):
             self.funcs["every_second"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
             return func
-        return func
+        return inner_decorator
 
-    def every_minute(self, func, interval, loop=True):
+    def every_minute(self, interval, loop=True):
         def inner_decorator(func):
             self.funcs["every_minute"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
             return func
-        return func
+        return inner_decorator
 
-
-    def every_hour(self, func, interval, loop=True):
+    def every_hour(self, interval, loop=True):
         def inner_decorator(func):
             self.funcs["every_hour"].append({"func":func, "interval":interval, "loop":loop, "done":False, "last":0, "timef":0})
             return func
-        return func
+        return inner_decorator
 
     def update(self):
         for timef in self.funcs["every_tick"]:
